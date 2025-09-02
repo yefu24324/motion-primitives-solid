@@ -45,47 +45,8 @@ export const docsConfig: TDocsConfig = {
           items: [],
           title: "Introduction",
         },
-        {
-          disabled: true,
-          href: "/docs/components-json",
-          items: [],
-          title: "components.json",
-        },
-        {
-          disabled: true,
-          href: "/docs/theming",
-          items: [],
-          title: "Theming",
-        },
-        {
-          disabled: true,
-          href: "/docs/dark-mode",
-          items: [],
-          title: "Dark mode",
-        },
-        {
-          disabled: true,
-          href: "/docs/cli",
-          items: [],
-          title: "CLI",
-        },
       ],
       title: "Get Started",
-    },
-    {
-      items: [
-        {
-          href: "/docs/primitives/animated-group",
-          items: [],
-          title: "Animated Group",
-        },
-        {
-          href: "/docs/primitives/cursor",
-          items: [],
-          title: "Cursor",
-        },
-      ],
-      title: "Primitives",
     },
     {
       items: [
@@ -105,6 +66,21 @@ export const docsConfig: TDocsConfig = {
     {
       items: [],
       title: "Animate UI / Shadcn",
+    },
+    {
+      items: [
+        {
+          href: "/docs/primitives/animated-group",
+          items: [],
+          title: "Animated Group",
+        },
+        {
+          href: "/docs/primitives/cursor",
+          items: [],
+          title: "Cursor",
+        },
+      ],
+      title: "Primitives",
     },
   ],
 };
