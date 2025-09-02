@@ -1,11 +1,11 @@
-import type { Accessor, ComponentProps, JSX, Setter, ValidComponent } from "solid-js";
-import { Match, Show, Switch, createContext, createEffect, createMemo, createSignal, mergeProps, onCleanup, splitProps, useContext } from "solid-js";
 import type { ElementOf } from "@kobalte/core";
 import { Polymorphic } from "@kobalte/core";
 import { Badge } from "@kobalte/core/badge";
 import type { PolymorphicProps } from "@kobalte/core/polymorphic";
 import { combineStyle } from "@solid-primitives/props";
 import type { VariantProps } from "cva";
+import type { Accessor, ComponentProps, JSX, Setter, ValidComponent } from "solid-js";
+import { createContext, createEffect, createMemo, createSignal, Match, mergeProps, onCleanup, Show, Switch, splitProps, useContext } from "solid-js";
 
 import { useIsMobile } from "@/components/hooks/use-mobile";
 import { callHandler } from "@/components/utils/call-handler";
@@ -66,7 +66,7 @@ export const SidebarProvider = (props: SidebarProviderProps) => {
   // This is the internal state of the sidebar.
   // We use openProp and setOpenProp for control from outside the component.
   const [_open, _setOpen] = createSignal(merge.defaultOpen);
-  const open = createMemo(() => merge.open ?? _open()!);
+  const open = createMemo(() => merge.open ?? _open() ?? false);
   const setOpen = (value: boolean | ((value: boolean) => boolean)) => {
     const openState = typeof value === "function" ? value(open()) : value;
     if (merge.onOpenChange) {
@@ -106,18 +106,19 @@ export const SidebarProvider = (props: SidebarProviderProps) => {
   const state = createMemo(() => (open() ? "expanded" : "collapsed"));
 
   const contextValue: SidebarContextProps = {
-    state,
-    open,
-    setOpen,
     isMobile,
+    open,
     openMobile,
+    setOpen,
     setOpenMobile,
+    state,
     toggleSidebar,
   };
 
   return (
     <SidebarContext.Provider value={contextValue}>
       <div
+        class={cx("group/sidebar-wrapper has-data-[variant=inset]:bg-sidebar flex min-h-svh w-full", merge.class)}
         data-slot="sidebar-wrapper"
         style={combineStyle(
           {
@@ -126,7 +127,6 @@ export const SidebarProvider = (props: SidebarProviderProps) => {
           },
           merge.style,
         )}
-        class={cx("group/sidebar-wrapper has-data-[variant=inset]:bg-sidebar flex min-h-svh w-full", merge.class)}
         {...rest}
       >
         {merge.children}
@@ -144,9 +144,9 @@ export type SidebarProps = ComponentProps<"div"> & {
 export const Sidebar = (props: SidebarProps) => {
   const merge = mergeProps<SidebarProps[]>(
     {
+      collapsible: "offcanvas",
       side: "left",
       variant: "sidebar",
-      collapsible: "offcanvas",
     },
     props,
   );
@@ -159,15 +159,14 @@ export const Sidebar = (props: SidebarProps) => {
       fallback={
         <div
           class="text-sidebar-foreground group peer hidden md:block"
-          data-state={state()}
           data-collapsible={state() === "collapsed" ? merge.collapsible : ""}
-          data-variant={merge.variant}
           data-side={merge.side}
           data-slot="sidebar"
+          data-state={state()}
+          data-variant={merge.variant}
         >
           {/* This is what handles the sidebar gap on desktop */}
           <div
-            data-slot="sidebar-gap"
             class={cx(
               "w-(--sidebar-width) relative bg-transparent transition-[width] duration-200 ease-linear",
               "group-data-[collapsible=offcanvas]:w-0",
@@ -176,9 +175,9 @@ export const Sidebar = (props: SidebarProps) => {
                 ? "group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4)))]"
                 : "group-data-[collapsible=icon]:w-(--sidebar-width-icon)",
             )}
+            data-slot="sidebar-gap"
           />
           <div
-            data-slot="sidebar-container"
             class={cx(
               "w-(--sidebar-width) fixed inset-y-0 z-10 hidden h-svh transition-[left,right,width] duration-200 ease-linear md:flex",
               merge.side === "left"
@@ -190,12 +189,13 @@ export const Sidebar = (props: SidebarProps) => {
                 : "group-data-[collapsible=icon]:w-(--sidebar-width-icon) group-data-[side=left]:border-r group-data-[side=right]:border-l",
               merge.class,
             )}
+            data-slot="sidebar-container"
             {...rest}
           >
             <div
+              class="bg-sidebar group-data-[variant=floating]:border-sidebar-border flex h-full w-full flex-col group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:shadow-sm"
               data-sidebar="sidebar"
               data-slot="sidebar-inner"
-              class="bg-sidebar group-data-[variant=floating]:border-sidebar-border flex h-full w-full flex-col group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:shadow-sm"
             >
               {merge.children}
             </div>
@@ -204,17 +204,17 @@ export const Sidebar = (props: SidebarProps) => {
       }
     >
       <Match when={merge.collapsible === "none"}>
-        <div data-slot="sidebar" class={cx("bg-sidebar text-sidebar-foreground w-(--sidebar-width) flex h-full flex-col", merge.class)} {...rest}>
+        <div class={cx("bg-sidebar text-sidebar-foreground w-(--sidebar-width) flex h-full flex-col", merge.class)} data-slot="sidebar" {...rest}>
           {merge.children}
         </div>
       </Match>
       <Match when={isMobile()}>
-        <Drawer open={openMobile()} onOpenChange={setOpenMobile} side={merge.side}>
+        <Drawer onOpenChange={setOpenMobile} open={openMobile()} side={merge.side}>
           <DrawerContent
+            class="bg-sidebar text-sidebar-foreground w-(--sidebar-width) p-0 [&>button]:hidden"
+            data-mobile="true"
             data-sidebar="sidebar"
             data-slot="sidebar"
-            data-mobile="true"
-            class="bg-sidebar text-sidebar-foreground w-(--sidebar-width) p-0 [&>button]:hidden"
             style={{
               "--sidebar-width": SIDEBAR_WIDTH_MOBILE,
             }}
@@ -239,21 +239,21 @@ export const SidebarTrigger = <T extends ValidComponent = "button">(props: Sideb
   };
 
   return (
-    <Button data-sidebar="trigger" data-slot="sidebar-trigger" variant="ghost" size="icon" class={cx("size-7", props.class)} onClick={handleOnclick} {...rest}>
+    <Button class={cx("size-7", props.class)} data-sidebar="trigger" data-slot="sidebar-trigger" onClick={handleOnclick} size="icon" variant="ghost" {...rest}>
       <Show
-        when={!open()}
         fallback={
-          <svg xmlns="http://www.w3.org/2000/svg" class="size-4" viewBox="0 0 24 24">
+          <svg class="size-4" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
-              <rect width="18" height="18" x="3" y="3" rx="2" />
+              <rect height="18" rx="2" width="18" x="3" y="3" />
               <path d="M9 3v18m7-6l-3-3l3-3" />
             </g>
           </svg>
         }
+        when={!open()}
       >
-        <svg xmlns="http://www.w3.org/2000/svg" class="size-4" viewBox="0 0 24 24">
+        <svg class="size-4" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
-            <rect width="18" height="18" x="3" y="3" rx="2" />
+            <rect height="18" rx="2" width="18" x="3" y="3" />
             <path d="M9 3v18m5-12l3 3l-3 3" />
           </g>
         </svg>
@@ -270,12 +270,7 @@ export const SidebarRail = (props: SidebarRailProps) => {
 
   return (
     <button
-      data-sidebar="rail"
-      data-slot="sidebar-rail"
       aria-label="Toggle Sidebar"
-      tabIndex={-1}
-      onClick={toggleSidebar}
-      title="Toggle Sidebar"
       class={cx(
         "hover:after:bg-sidebar-border absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-all ease-linear after:absolute after:inset-y-0 after:left-1/2 after:w-[2px] group-data-[side=left]:-right-4 group-data-[side=right]:left-0 sm:flex",
         "in-data-[side=left]:cursor-w-resize in-data-[side=right]:cursor-e-resize",
@@ -285,6 +280,11 @@ export const SidebarRail = (props: SidebarRailProps) => {
         "[[data-side=right][data-collapsible=offcanvas]_&]:-left-2",
         props.class,
       )}
+      data-sidebar="rail"
+      data-slot="sidebar-rail"
+      onClick={toggleSidebar}
+      tabIndex={-1}
+      title="Toggle Sidebar"
       {...rest}
     />
   );
@@ -297,12 +297,12 @@ export const SidebarInset = (props: SidebarInsetProps) => {
 
   return (
     <main
-      data-slot="sidebar-inset"
       class={cx(
         "bg-background relative flex w-full flex-1 flex-col",
         "md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ml-2 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow-sm",
         props.class,
       )}
+      data-slot="sidebar-inset"
       {...rest}
     />
   );
@@ -313,7 +313,7 @@ export type SidebarHeaderProps = ComponentProps<"div">;
 export const SidebarHeader = (props: SidebarHeaderProps) => {
   const [, rest] = splitProps(props, ["class"]);
 
-  return <div data-slot="sidebar-header" data-sidebar="header" class={cx("flex flex-col gap-2 p-2", props.class)} {...rest} />;
+  return <div class={cx("flex flex-col gap-2 p-2", props.class)} data-sidebar="header" data-slot="sidebar-header" {...rest} />;
 };
 
 export type SidebarFooterProps = ComponentProps<"div">;
@@ -321,7 +321,7 @@ export type SidebarFooterProps = ComponentProps<"div">;
 export const SidebarFooter = (props: SidebarFooterProps) => {
   const [, rest] = splitProps(props, ["class"]);
 
-  return <div data-slot="sidebar-footer" data-sidebar="footer" class={cx("flex flex-col gap-2 p-2", props.class)} {...rest} />;
+  return <div class={cx("flex flex-col gap-2 p-2", props.class)} data-sidebar="footer" data-slot="sidebar-footer" {...rest} />;
 };
 
 export type SidebarSeparatorProps<T extends ValidComponent = "hr"> = ComponentProps<typeof Separator<T>>;
@@ -329,7 +329,7 @@ export type SidebarSeparatorProps<T extends ValidComponent = "hr"> = ComponentPr
 export const SidebarSeparator = (props: SidebarSeparatorProps) => {
   const [, rest] = splitProps(props, ["class"]);
 
-  return <Separator data-slot="sidebar-separator" data-sidebar="header" class={cx("flex flex-col gap-2 p-2", props.class)} {...rest} />;
+  return <Separator class={cx("flex flex-col gap-2 p-2", props.class)} data-sidebar="header" data-slot="sidebar-separator" {...rest} />;
 };
 
 export type SidebarContentProps = ComponentProps<"div">;
@@ -339,9 +339,9 @@ export const SidebarContent = (props: SidebarContentProps) => {
 
   return (
     <div
-      data-slot="sidebar-content"
-      data-sidebar="content"
       class={cx("flex min-h-0 flex-1 flex-col gap-2 overflow-auto group-data-[collapsible=icon]:overflow-hidden", props.class)}
+      data-sidebar="content"
+      data-slot="sidebar-content"
       {...rest}
     />
   );
@@ -352,7 +352,7 @@ export type SidebarGroupProps = ComponentProps<"div">;
 export const SidebarGroup = (props: SidebarGroupProps) => {
   const [, rest] = splitProps(props, ["class"]);
 
-  return <div data-slot="sidebar-group" data-sidebar="group" class={cx("relative flex w-full min-w-0 flex-col p-2", props.class)} {...rest} />;
+  return <div class={cx("relative flex w-full min-w-0 flex-col p-2", props.class)} data-sidebar="group" data-slot="sidebar-group" {...rest} />;
 };
 
 export interface SidebarGroupLabelCommonProps<_T extends HTMLElement = HTMLElement> {
@@ -373,13 +373,13 @@ export const SidebarGroupLabel = <T extends ValidComponent = "div">(props: Polym
   return (
     <Polymorphic
       as={merge.as}
-      data-slot="sidebar-group-label"
-      data-sidebar="group-label"
       class={cx(
         "text-sidebar-foreground/70 ring-sidebar-ring outline-hidden flex h-8 shrink-0 items-center rounded-md px-2 text-xs font-medium transition-[margin,opacity] duration-200 ease-linear focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0",
         "group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0",
         merge.class,
       )}
+      data-sidebar="group-label"
+      data-slot="sidebar-group-label"
       {...rest}
     />
   );
@@ -403,8 +403,6 @@ export const SidebarGroupAction = <T extends ValidComponent = "button">(props: P
   return (
     <Polymorphic
       as={merge.as}
-      data-slot="sidebar-group-action"
-      data-sidebar="group-action"
       class={cx(
         "text-sidebar-foreground ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground outline-hidden absolute right-3 top-3.5 flex aspect-square w-5 items-center justify-center rounded-md p-0 transition-transform focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0",
         // Increases the hit area of the button on mobile.
@@ -412,6 +410,8 @@ export const SidebarGroupAction = <T extends ValidComponent = "button">(props: P
         "group-data-[collapsible=icon]:hidden",
         merge.class,
       )}
+      data-sidebar="group-action"
+      data-slot="sidebar-group-action"
       {...rest}
     />
   );
@@ -422,7 +422,7 @@ export type SidebarGroupContentProps = ComponentProps<"div">;
 export const SidebarGroupContent = (props: SidebarGroupContentProps) => {
   const [, rest] = splitProps(props, ["class"]);
 
-  return <div data-slot="sidebar-group-content" data-sidebar="group-content" class={cx("w-full text-sm", props.class)} {...rest} />;
+  return <div class={cx("w-full text-sm", props.class)} data-sidebar="group-content" data-slot="sidebar-group-content" {...rest} />;
 };
 
 export type SidebarMenuProps = ComponentProps<"ul">;
@@ -430,7 +430,7 @@ export type SidebarMenuProps = ComponentProps<"ul">;
 export const SidebarMenu = (props: SidebarMenuProps) => {
   const [, rest] = splitProps(props, ["class"]);
 
-  return <ul data-slot="sidebar-menu" data-sidebar="menu" class={cx("flex w-full min-w-0 flex-col gap-1", props.class)} {...rest} />;
+  return <ul class={cx("flex w-full min-w-0 flex-col gap-1", props.class)} data-sidebar="menu" data-slot="sidebar-menu" {...rest} />;
 };
 
 export type SidebarMenuItemProps = ComponentProps<"li">;
@@ -438,26 +438,26 @@ export type SidebarMenuItemProps = ComponentProps<"li">;
 export const SidebarMenuItem = (props: SidebarMenuItemProps) => {
   const [, rest] = splitProps(props, ["class"]);
 
-  return <li data-slot="sidebar-menu-item" data-sidebar="menu-item" class={cx("group/menu-item relative", props.class)} {...rest} />;
+  return <li class={cx("group/menu-item relative", props.class)} data-sidebar="menu-item" data-slot="sidebar-menu-item" {...rest} />;
 };
 
 export const SidebarMenuButtonVariants = cva({
   base: "peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm outline-hidden ring-sidebar-ring transition-[width,height,padding] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 group-has-data-[sidebar=menu-action]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0",
+  defaultVariants: {
+    size: "default",
+    variant: "default",
+  },
   variants: {
+    size: {
+      default: "h-8 text-sm",
+      lg: "h-12 text-sm group-data-[collapsible=icon]:p-0!",
+      sm: "h-7 text-xs",
+    },
     variant: {
       default: "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
       outline:
         "bg-background shadow-[0_0_0_1px_hsl(var(--sidebar-border))] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:shadow-[0_0_0_1px_hsl(var(--sidebar-accent))]",
     },
-    size: {
-      default: "h-8 text-sm",
-      sm: "h-7 text-xs",
-      lg: "h-12 text-sm group-data-[collapsible=icon]:p-0!",
-    },
-  },
-  defaultVariants: {
-    variant: "default",
-    size: "default",
   },
 });
 
@@ -485,20 +485,19 @@ export const SidebarMenuButton = <T extends ValidComponent = "button">(props: Po
 
   return (
     <Show
-      when={!merge.tooltip && state() === "collapsed"}
       fallback={
         <Tooltip placement="right">
           <TooltipTrigger
             as={merge.as}
-            data-slot="sidebar-menu-button"
-            data-sidebar="menu-button"
-            data-size={merge.size}
-            data-active={merge.isActive}
             class={SidebarMenuButtonVariants({
+              class: merge.class,
               size: merge.size,
               variant: merge.variant,
-              class: merge.class,
             })}
+            data-active={merge.isActive}
+            data-sidebar="menu-button"
+            data-size={merge.size}
+            data-slot="sidebar-menu-button"
             {...rest}
           />
           <TooltipPortal>
@@ -509,18 +508,19 @@ export const SidebarMenuButton = <T extends ValidComponent = "button">(props: Po
           </TooltipPortal>
         </Tooltip>
       }
+      when={!merge.tooltip && state() === "collapsed"}
     >
       <Polymorphic
         as={merge.as}
-        data-slot="sidebar-menu-button"
-        data-sidebar="menu-button"
-        data-size={merge.size}
-        data-active={merge.isActive}
         class={SidebarMenuButtonVariants({
+          class: merge.class,
           size: merge.size,
           variant: merge.variant,
-          class: merge.class,
         })}
+        data-active={merge.isActive}
+        data-sidebar="menu-button"
+        data-size={merge.size}
+        data-slot="sidebar-menu-button"
         {...rest}
       />
     </Show>
@@ -550,8 +550,6 @@ export const SidebarMenuAction = <T extends ValidComponent = "button">(props: Po
   return (
     <Polymorphic
       as={merge.as}
-      data-slot="sidebar-menu-action"
-      data-sidebar="menu-action"
       class={cx(
         "text-sidebar-foreground ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground peer-hover/menu-button:text-sidebar-accent-foreground outline-hidden absolute right-1 top-1.5 flex aspect-square w-5 items-center justify-center rounded-md p-0 transition-transform focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0",
         // Increases the hit area of the button on mobile.
@@ -564,6 +562,8 @@ export const SidebarMenuAction = <T extends ValidComponent = "button">(props: Po
           "peer-data-[active=true]/menu-button:text-sidebar-accent-foreground group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 data-[state=open]:opacity-100 md:opacity-0",
         merge.class,
       )}
+      data-sidebar="menu-action"
+      data-slot="sidebar-menu-action"
       {...rest}
     />
   );
@@ -576,8 +576,6 @@ export const SidebarMenuBadge = <T extends ValidComponent = "span">(props: Sideb
 
   return (
     <Badge
-      data-slot="sidebar-menu-badge"
-      data-sidebar="menu-badge"
       class={cx(
         "text-sidebar-foreground pointer-events-none absolute right-1 flex h-5 min-w-5 select-none items-center justify-center rounded-md px-1 text-xs font-medium tabular-nums",
         "peer-hover/menu-button:text-sidebar-accent-foreground peer-data-[active=true]/menu-button:text-sidebar-accent-foreground",
@@ -587,6 +585,8 @@ export const SidebarMenuBadge = <T extends ValidComponent = "span">(props: Sideb
         "group-data-[collapsible=icon]:hidden",
         props.class,
       )}
+      data-sidebar="menu-badge"
+      data-slot="sidebar-menu-badge"
       {...rest}
     />
   );
@@ -608,7 +608,7 @@ export const SidebarMenuSkeleton = (props: SidebarMenuSkeletonProps) => {
   const width = createMemo(() => `${Math.floor(Math.random() * 40) + 50}%`);
 
   return (
-    <div data-slot="sidebar-menu-skeleton" data-sidebar="menu-skeleton" class={cx("flex h-8 items-center gap-2 rounded-md px-2", props.class)} {...rest}>
+    <div class={cx("flex h-8 items-center gap-2 rounded-md px-2", props.class)} data-sidebar="menu-skeleton" data-slot="sidebar-menu-skeleton" {...rest}>
       <Show when={merge.showIcon}>
         <Skeleton class="size-4 rounded-md" data-sidebar="menu-skeleton-icon" />
       </Show>
@@ -630,13 +630,13 @@ export const SidebarMenuSub = (props: SidebarMenuSub) => {
 
   return (
     <ul
-      data-slot="sidebar-menu-sub"
-      data-sidebar="menu-sub"
       class={cx(
         "border-sidebar-border mx-3.5 flex min-w-0 translate-x-px flex-col gap-1 border-l px-2.5 py-0.5",
         "group-data-[collapsible=icon]:hidden",
         props.class,
       )}
+      data-sidebar="menu-sub"
+      data-slot="sidebar-menu-sub"
       {...rest}
     />
   );
@@ -647,7 +647,7 @@ export type SidebarMenuSubItem = ComponentProps<"li">;
 export const SidebarMenuSubItem = (props: SidebarMenuSubItem) => {
   const [, rest] = splitProps(props, ["class"]);
 
-  return <li data-slot="sidebar-menu-sub-item" data-sidebar="menu-sub-item" class={cx("group/menu-sub-item relative", props.class)} {...rest} />;
+  return <li class={cx("group/menu-sub-item relative", props.class)} data-sidebar="menu-sub-item" data-slot="sidebar-menu-sub-item" {...rest} />;
 };
 
 export interface SidebarMenuSubButtonOptions {
@@ -675,10 +675,6 @@ export const SidebarMenuSubButton = <T extends ValidComponent = "a">(props: Poly
   return (
     <Polymorphic
       as={merge.as}
-      data-slot="sidebar-menu-sub-button"
-      data-sidebar="menu-sub-button"
-      data-size={merge.size}
-      data-active={merge.isActive}
       class={cx(
         "text-sidebar-foreground ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground active:bg-sidebar-accent active:text-sidebar-accent-foreground [&>svg]:text-sidebar-accent-foreground outline-hidden flex h-7 min-w-0 -translate-x-px items-center gap-2 overflow-hidden rounded-md px-2 focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0",
         "data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground",
@@ -687,6 +683,10 @@ export const SidebarMenuSubButton = <T extends ValidComponent = "a">(props: Poly
         "group-data-[collapsible=icon]:hidden",
         merge.class,
       )}
+      data-active={merge.isActive}
+      data-sidebar="menu-sub-button"
+      data-size={merge.size}
+      data-slot="sidebar-menu-sub-button"
       {...rest}
     />
   );

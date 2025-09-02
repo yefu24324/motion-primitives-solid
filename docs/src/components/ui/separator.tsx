@@ -1,6 +1,6 @@
+import { Root as SeparatorPrimitive } from "@kobalte/core/separator";
 import type { ComponentProps, ValidComponent } from "solid-js";
 import { splitProps } from "solid-js";
-import { Root as SeparatorPrimitive } from "@kobalte/core/separator";
 
 import { cx } from "@/components/utils/cva";
 
@@ -11,11 +11,11 @@ export const Separator = <T extends ValidComponent = "hr">(props: SeparatorProps
 
   return (
     <SeparatorPrimitive
-      data-slot="separator"
       class={cx(
         "bg-border shrink-0 border-none data-[orientation=horizontal]:h-px data-[orientation=vertical]:h-full data-[orientation=horizontal]:w-full data-[orientation=vertical]:w-px",
         props.class,
       )}
+      data-slot="separator"
       {...rest}
     />
   );

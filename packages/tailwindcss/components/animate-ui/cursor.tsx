@@ -128,7 +128,7 @@ type CursorFollowProps = JSX.HTMLAttributes<HTMLDivElement> & {
 };
 
 function CursorFollow(props: CursorFollowProps) {
-  const { sideOffset = 15, align = "bottom-right", children, class: className, style, ...otherProps } = props;
+  const { sideOffset = 15, align = "bottom-right", style, ...otherProps } = props;
 
   const { cursorPos, isActive, cursorRef } = useCursor();
   let cursorFollowRef: HTMLDivElement | undefined;
@@ -245,14 +245,14 @@ function CursorFollow(props: CursorFollowProps) {
             // x: springX(),
             // y: springY(),
           }}
-          class={cx("transform-[translate(-50%,-50%)] pointer-events-none z-[9998] absolute", className)}
+          class={cx("transform-[translate(-50%,-50%)] pointer-events-none z-[9998] absolute", props.class)}
           data-slot="cursor-follow"
           exit={{ opacity: 0, scale: 0 }}
           initial={{ opacity: 0, scale: 0 }}
           ref={cursorFollowRef}
           {...otherProps}
         >
-          {children}
+          {props.children}
         </Motion>
       </Show>
     </Presence>

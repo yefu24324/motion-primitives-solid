@@ -1,6 +1,6 @@
+import { useLocation } from "@solidjs/router";
 import type { ComponentProps } from "solid-js";
 import { For, splitProps } from "solid-js";
-
 import {
   Sidebar,
   SidebarContent,
@@ -12,10 +12,10 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { cx } from "@/components/utils/cva";
-
 import { docsConfig } from "@/config/docs";
 
 const DocsSidebar = (props: ComponentProps<typeof Sidebar>) => {
+  const location = useLocation();
   return (
     <Sidebar
       class="sticky top-[calc(var(--header-height)+1px)] z-30 hidden h-[calc(100svh-var(--header-height)-var(--footer-height))] bg-transparent lg:flex"
@@ -33,8 +33,8 @@ const DocsSidebar = (props: ComponentProps<typeof Sidebar>) => {
                   <For each={item.items}>
                     {(item) => (
                       <SidebarMenuItem
-                        data-indicator={item.indicator}
                         class="data-[indicator]:before:ring-background w-fit data-[indicator]:before:absolute data-[indicator]:before:top-0 data-[indicator]:before:-right-0.5 data-[indicator]:before:z-10 data-[indicator]:before:size-1.5 data-[indicator]:before:rounded-full data-[indicator]:before:ring-2 data-[indicator=new]:before:bg-green-500 data-[indicator=updated]:before:bg-blue-500"
+                        data-indicator={item.indicator}
                       >
                         <SidebarMenuButton<typeof SidebarMenuButton>
                           as={(props) => {
@@ -42,21 +42,22 @@ const DocsSidebar = (props: ComponentProps<typeof Sidebar>) => {
 
                             return (
                               <a
-                                href={item.href}
+                                activeProps={{
+                                  class: "bg-accent border-accent",
+                                }}
                                 class={cx(
                                   local.class,
                                   "relative h-[30px] overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md aria-disabled:pointer-events-none aria-disabled:opacity-40 aria-disabled:select-none",
                                 )}
                                 disabled={item.disabled}
-                                activeProps={{
-                                  class: "bg-accent border-accent",
-                                }}
+                                href={item.href}
                                 {...rest}
                               >
                                 {item.title}
                               </a>
                             );
                           }}
+                          isActive={item.href === location.pathname}
                         />
                       </SidebarMenuItem>
                     )}

@@ -6,7 +6,8 @@
     "build": "vinxi build",
     "start": "vinxi start",
     "lint": "biome lint",
-    "format": "biome format --write"
+    "format": "biome format --write",
+    "check": "biome check --write"
   },
   "dependencies": {
     "@corvu/drawer": "^0.2.4",

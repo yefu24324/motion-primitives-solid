@@ -1,7 +1,7 @@
-import type { ComponentProps, ValidComponent } from "solid-js";
-import { Show, mergeProps, splitProps } from "solid-js";
 import type { DynamicProps } from "@corvu/drawer";
 import DrawerPrimitive from "@corvu/drawer";
+import type { ComponentProps, ValidComponent } from "solid-js";
+import { mergeProps, Show, splitProps } from "solid-js";
 
 import { cx } from "@/components/utils/cva";
 
@@ -43,14 +43,13 @@ export const DrawerContent = <T extends ValidComponent = "div">(props: DrawerCon
   return (
     <>
       <DrawerPrimitive.Overlay
-        data-slot="drawer-overlay"
         class="fixed inset-0 z-50 bg-black/50 data-[transitioning]:transition-colors data-[transitioning]:duration-500 data-[transitioning]:ease-[cubic-bezier(0.32,0.72,0,1)]"
+        data-slot="drawer-overlay"
         style={{
           "background-color": `rgb(0 0 0 / ${0.5 * context.openPercentage()}`,
         }}
       />
       <DrawerPrimitive.Content
-        data-slot="drawer-content"
         class={cx(
           "bg-background fixed z-50 flex h-auto flex-col after:absolute after:bg-inherit data-[transitioning]:transition-transform data-[transitioning]:duration-500 data-[transitioning]:ease-[cubic-bezier(0.32,0.72,0,1)]",
           context.side() === "bottom" && [
@@ -62,6 +61,7 @@ export const DrawerContent = <T extends ValidComponent = "div">(props: DrawerCon
           context.side() === "right" && ["inset-y-0 right-0 w-3/4 border-l sm:max-w-sm", "after:inset-y-0 after:left-[calc(100%-1px)] after:w-1/2"],
           props.class,
         )}
+        data-slot="drawer-content"
         {...rest}
       >
         <Show when={props.withHandle}>
@@ -78,7 +78,7 @@ export type DrawerLabelProps<T extends ValidComponent = "h2"> = ComponentProps<t
 export const DrawerLabel = <T extends ValidComponent = "h2">(props: DynamicProps<T, DrawerLabelProps<T>>) => {
   const [, rest] = splitProps(props as DrawerLabelProps, ["class"]);
 
-  return <DrawerPrimitive.Label data-slot="drawer-label" class={cx("text-foreground font-semibold", props.class)} {...rest} />;
+  return <DrawerPrimitive.Label class={cx("text-foreground font-semibold", props.class)} data-slot="drawer-label" {...rest} />;
 };
 
 export type DrawerDescriptionProps<T extends ValidComponent = "p"> = ComponentProps<typeof DrawerPrimitive.Description<T>>;
@@ -86,7 +86,7 @@ export type DrawerDescriptionProps<T extends ValidComponent = "p"> = ComponentPr
 export const DrawerDescription = <T extends ValidComponent = "p">(props: DynamicProps<T, DrawerDescriptionProps<T>>) => {
   const [, rest] = splitProps(props as DrawerDescriptionProps, ["class"]);
 
-  return <DrawerPrimitive.Description data-slot="drawer-description" class={cx("text-muted-foreground text-sm", props.class)} {...rest} />;
+  return <DrawerPrimitive.Description class={cx("text-muted-foreground text-sm", props.class)} data-slot="drawer-description" {...rest} />;
 };
 
 export type DrawerHeaderProps = ComponentProps<"div">;
@@ -94,7 +94,7 @@ export type DrawerHeaderProps = ComponentProps<"div">;
 export const DrawerHeader = (props: DrawerHeaderProps) => {
   const [, rest] = splitProps(props, ["class"]);
 
-  return <div data-slot="drawer-header" class={cx("flex flex-col gap-1.5 p-4", props.class)} {...rest} />;
+  return <div class={cx("flex flex-col gap-1.5 p-4", props.class)} data-slot="drawer-header" {...rest} />;
 };
 
 export type DrawerFooterProps = ComponentProps<"div">;
@@ -102,5 +102,5 @@ export type DrawerFooterProps = ComponentProps<"div">;
 export const DrawerFooter = (props: DrawerFooterProps) => {
   const [, rest] = splitProps(props, ["class"]);
 
-  return <div data-slot="drawer-footer" class={cx("mt-auto flex flex-col gap-2 p-4", props.class)} {...rest} />;
+  return <div class={cx("mt-auto flex flex-col gap-2 p-4", props.class)} data-slot="drawer-footer" {...rest} />;
 };

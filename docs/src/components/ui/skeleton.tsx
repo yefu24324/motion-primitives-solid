@@ -1,6 +1,6 @@
+import { Root as SkeletonPrimitive } from "@kobalte/core/skeleton";
 import type { ComponentProps, ValidComponent } from "solid-js";
 import { mergeProps, splitProps } from "solid-js";
-import { Root as SkeletonPrimitive } from "@kobalte/core/skeleton";
 
 import { cx } from "@/components/utils/cva";
 
@@ -17,13 +17,13 @@ export const Skeleton = <T extends ValidComponent = "div">(props: SkeletonProps<
 
   return (
     <SkeletonPrimitive
-      data-slot="skeleton"
       class={cx(
         "translate-z-0 relative h-auto w-full",
         "data-[visible=true]:after:bg-accent data-[visible=true]:after:absolute data-[visible=true]:after:inset-0 data-[visible=true]:after:z-[11] data-[visible=true]:after:content-['']",
         "data-[visible=true]:animate-pulse data-[visible=true]:overflow-hidden",
         props.class,
       )}
+      data-slot="skeleton"
       {...rest}
     />
   );
