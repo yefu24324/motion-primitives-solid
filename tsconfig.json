@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
+    "allowJs": true,
+    "strict": true,
+    "noEmit": true,
+    "types": ["vinxi/types/client"],
+    "isolatedModules": true,
+    "paths": {
+      "@/*": ["./docs/src/*"],
+      "@/components/utils/*": ["./packages/tailwindcss/components/utils/*"],
+      "@/components/motion/*": ["./packages/tailwindcss/components/motion/*"],
+      "@/components/animate-ui/*": ["./packages/tailwindcss/components/animate-ui/*"]
+    }
+  }
+}

@@ -1,0 +1,110 @@
+export interface TNavItem {
+  title: string;
+  href?: string;
+  disabled?: boolean;
+  indicator?: "new" | "updated";
+}
+
+export type TSidebarNavItem = TNavItem & {
+  items: TSidebarNavItem[];
+};
+
+export type TNavItemWithChildren = TNavItem & {
+  items: TNavItemWithChildren[];
+};
+
+export interface TDocsConfig {
+  mainNav: TNavItem[];
+  sidebarNav: TSidebarNavItem[];
+}
+
+export const docsConfig: TDocsConfig = {
+  mainNav: [
+    {
+      href: "/docs/introduction",
+      title: "Docs",
+    },
+    {
+      href: "/docs/components/accordion",
+      title: "Components",
+    },
+    // {
+    //   title: "Blocks",
+    //   href: "/blocks",
+    // },
+    {
+      href: "/charts/area",
+      title: "Charts",
+    },
+  ],
+  sidebarNav: [
+    {
+      items: [
+        {
+          href: "/docs/introduction",
+          items: [],
+          title: "Introduction",
+        },
+        {
+          disabled: true,
+          href: "/docs/components-json",
+          items: [],
+          title: "components.json",
+        },
+        {
+          disabled: true,
+          href: "/docs/theming",
+          items: [],
+          title: "Theming",
+        },
+        {
+          disabled: true,
+          href: "/docs/dark-mode",
+          items: [],
+          title: "Dark mode",
+        },
+        {
+          disabled: true,
+          href: "/docs/cli",
+          items: [],
+          title: "CLI",
+        },
+      ],
+      title: "Get Started",
+    },
+    {
+      items: [
+        {
+          href: "/docs/primitives/animated-group",
+          items: [],
+          title: "Animated Group",
+        },
+        {
+          href: "/docs/primitives/cursor",
+          items: [],
+          title: "Cursor",
+        },
+      ],
+      title: "Primitives",
+    },
+    {
+      items: [
+        {
+          href: "/docs/animate-ui/components/cursor",
+          items: [],
+          title: "Cursor",
+        },
+        {
+          href: "/docs/animate-ui/effects/motion-effect",
+          items: [],
+          title: "Motion Effect",
+        },
+      ],
+      title: "Animate UI",
+    },
+    {
+      items: [],
+      title: "Animate UI / Shadcn",
+    },
+  ],
+};
