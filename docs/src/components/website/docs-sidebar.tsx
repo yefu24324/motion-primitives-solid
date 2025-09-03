@@ -1,6 +1,7 @@
 import { useLocation } from "@solidjs/router";
 import type { ComponentProps } from "solid-js";
 import { For, splitProps } from "solid-js";
+
 import {
   Sidebar,
   SidebarContent,

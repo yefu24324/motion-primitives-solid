@@ -2,6 +2,7 @@ import type { RouteSectionProps } from "@solidjs/router";
 import type { JSX } from "solid-js";
 // @ts-expect-error
 import { MDXProvider } from "solid-mdx";
+
 import { SidebarProvider } from "@/components/ui/sidebar";
 import DocsSidebar from "@/components/website/docs-sidebar";
 import { mdxCustomComponents } from "@/components/website/mdx";

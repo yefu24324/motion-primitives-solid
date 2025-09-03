@@ -16,7 +16,8 @@
       "@/*": ["./docs/src/*"],
       "@/components/utils/*": ["./packages/tailwindcss/components/utils/*"],
       "@/components/motion/*": ["./packages/tailwindcss/components/motion/*"],
-      "@/components/animate-ui/*": ["./packages/tailwindcss/components/animate-ui/*"]
+      "@/components/animate-ui/*": ["./packages/tailwindcss/components/animate-ui/*"],
+      "@/components/animate-ui/shadcn/*": ["./packages/tailwindcss/components/ui/*"]
     }
   }
 }

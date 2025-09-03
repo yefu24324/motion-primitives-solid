@@ -64,7 +64,13 @@ export const docsConfig: TDocsConfig = {
       title: "Animate UI",
     },
     {
-      items: [],
+      items: [
+        {
+          href: "/docs/shadcn-ui/accordion",
+          items: [],
+          title: "Accordion",
+        },
+      ],
       title: "Animate UI / Shadcn",
     },
     {

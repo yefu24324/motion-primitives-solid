@@ -1,4 +1,5 @@
 import { For } from "solid-js";
+
 import { MotionEffect } from "@/components/animate-ui/motion-effect";
 
 export const MotionEffectDemo = () => {
