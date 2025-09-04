@@ -76,17 +76,12 @@ export const docsConfig: TDocsConfig = {
     {
       items: [
         {
-          href: "/docs/primitives/animated-group",
+          href: "/docs/motion/text-loop",
           items: [],
-          title: "Animated Group",
-        },
-        {
-          href: "/docs/primitives/cursor",
-          items: [],
-          title: "Cursor",
+          title: "Text Loop",
         },
       ],
-      title: "Primitives",
+      title: "Motion Primitives",
     },
   ],
 };

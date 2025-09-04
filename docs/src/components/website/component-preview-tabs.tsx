@@ -74,12 +74,13 @@ export const ComponentPreviewTabs = (props: Props) => {
             </div>
 
             <TabsContent value="preview">
-              <div
+              {/* <div
                 class="preview flex min-h-[450px] w-full justify-center rounded-lg border p-10 data-[align=center]:items-center data-[align=end]:items-end data-[align=start]:items-start"
                 data-align={props.align}
               >
                 {render() && props.component()}
-              </div>
+              </div> */}
+              <div class="group flex w-full rounded-md min-h-0 py-12 px-12 justify-start items-start">{render() && props.component()}</div>
             </TabsContent>
             <TabsContent class="overflow-hidden **:[figure]:!m-0 **:[pre]:h-[450px]" value="code">
               {props.children}
