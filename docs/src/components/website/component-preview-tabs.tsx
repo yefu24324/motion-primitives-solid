@@ -2,8 +2,8 @@ import { RotateCw } from "lucide-solid";
 import { type ComponentProps, createSignal, type JSX, mergeProps, Show, splitProps } from "solid-js";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { cx } from "@/components/utils/cva";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 type Props = ComponentProps<"div"> & {
   align?: "center" | "start" | "end";

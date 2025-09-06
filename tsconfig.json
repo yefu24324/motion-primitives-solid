@@ -14,6 +14,7 @@
     "isolatedModules": true,
     "paths": {
       "@/*": ["./docs/src/*"],
+      "@/components/ui/*": ["./packages/tailwindcss/components/ui/*"],
       "@/components/utils/*": ["./packages/tailwindcss/components/utils/*"],
       "@/components/motion/*": ["./packages/tailwindcss/components/motion/*"],
       "@/components/animate-ui/*": ["./packages/tailwindcss/components/animate-ui/*"],

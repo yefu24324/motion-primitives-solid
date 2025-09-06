@@ -70,6 +70,11 @@ export const docsConfig: TDocsConfig = {
           items: [],
           title: "Accordion",
         },
+        {
+          href: "/docs/shadcn-ui/collapsible",
+          items: [],
+          title: "Collapsible",
+        },
       ],
       title: "Animate UI / Shadcn",
     },

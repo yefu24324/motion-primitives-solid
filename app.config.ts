@@ -12,7 +12,7 @@ const { default: mdx } = pkg;
 export default defineConfig({
   appRoot: "./docs/src",
   extensions: ["mdx", "md"],
-  ssr: true,
+  ssr: false,
   vite: {
     plugins: [
       tailwindcss(),

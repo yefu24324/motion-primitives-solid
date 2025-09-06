@@ -1,4 +1,4 @@
-import { ColorModeProvider, ColorModeScript } from "@kobalte/core";
+import { ColorModeProvider, ColorModeScript } from "@kobalte/core/color-mode";
 import { Router } from "@solidjs/router";
 import { FileRoutes } from "@solidjs/start/router";
 import { Suspense } from "solid-js";
