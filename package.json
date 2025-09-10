@@ -41,6 +41,7 @@
     "remark-code-import": "^1.2.0",
     "remark-frontmatter": "^5.0.0",
     "remark-gfm": "^4.0.1",
+    "rollup-plugin-visualizer": "^6.0.3",
     "tailwindcss": "^4.1.12",
     "vite-plugin-entry-shaking": "^0.5.1",
     "vite-tsconfig-paths": "^5.1.4"

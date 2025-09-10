@@ -6,6 +6,7 @@ import { type Options, rehypePrettyCode } from "rehype-pretty-code";
 import codeImport from "remark-code-import";
 import remarkFrontmatter from "remark-frontmatter";
 import remarkGFM from "remark-gfm";
+import { visualizer } from "rollup-plugin-visualizer";
 import tsConfigPaths from "vite-tsconfig-paths";
 
 const { default: mdx } = pkg;
@@ -45,6 +46,13 @@ export default defineConfig({
             } satisfies Parameters<typeof codeImport>[0],
           ],
         ],
+      }),
+      visualizer({
+        brotliSize: true,
+        emitFile: false,
+        filename: "visualizer.html", //分析图生成的文件名
+        gzipSize: false,
+        open: false, //如果存在本地服务端口，将在打包后自动展示
       }),
     ],
   },
