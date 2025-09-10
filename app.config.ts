@@ -15,6 +15,7 @@ export default defineConfig({
   extensions: ["mdx", "md"],
   ssr: false,
   vite: {
+    envPrefix: ["TRACKING_", "VITE_"],
     plugins: [
       tailwindcss(),
       tsConfigPaths({
