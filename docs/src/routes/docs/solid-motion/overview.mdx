@@ -1,0 +1,34 @@
+import { ComponentPreview } from '@/components/website/component-preview';
+import { Steps, Step, StepIcon, StepTitle } from "@/components/website/mdx/steps";
+
+# Solid Motion
+
+## Basic Usage
+
+```tsx
+import { Motion } from "solid-motion";
+
+<Motion animate={{ opacity: 1 }} initial={{ opacity: 0 }}>Hello World</Motion>
+```
+
+# Installation
+
+<Steps>
+  <Step>
+    <StepIcon>1</StepIcon>
+    <StepTitle>Install the following dependencies:</StepTitle>
+
+    ```shell
+    pnpm add motion solid-motion
+    ```
+  </Step>
+  <Step>
+    <StepIcon>2</StepIcon>
+    <StepTitle>Import the Motion component:</StepTitle>
+    ```tsx
+    import { Motion } from "solid-motion";
+
+    <Motion animate={{ opacity: 1 }} initial={{ opacity: 0 }}>Hello World</Motion>
+    ```
+  </Step>
+</Steps>

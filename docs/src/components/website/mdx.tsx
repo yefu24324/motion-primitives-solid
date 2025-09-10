@@ -30,7 +30,7 @@ export const mdxCustomComponents: MDXComponents | Record<string, unknown> = {
     },
   ) => {
     const [local, rest] = splitProps(props, ["class", "__raw__", "__src__", "__npm__", "__yarn__", "__pnpm__", "__bun__"]);
-
+    console.log("code pre", local);
     const isCommand = () => local.__npm__ ?? local.__yarn__ ?? local.__pnpm__ ?? local.__bun__;
 
     return (

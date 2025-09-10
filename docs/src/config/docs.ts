@@ -51,6 +51,16 @@ export const docsConfig: TDocsConfig = {
     {
       items: [
         {
+          href: "/docs/solid-motion/overview",
+          items: [],
+          title: "Overview",
+        },
+      ],
+      title: "Solid Motion",
+    },
+    {
+      items: [
+        {
           href: "/docs/animate-ui/components/cursor",
           items: [],
           title: "Cursor",

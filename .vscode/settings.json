@@ -1,4 +1,5 @@
 {
+  "editor.tabSize": 2,
   // 启用保存时的代码操作
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "biomejs.biome",
