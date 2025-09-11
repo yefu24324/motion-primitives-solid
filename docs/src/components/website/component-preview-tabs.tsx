@@ -7,6 +7,7 @@ import { cx } from "@/components/utils/cva";
 
 type Props = ComponentProps<"div"> & {
   align?: "center" | "start" | "end";
+  justify?: "center" | "start" | "end";
   hideCode?: boolean;
   component: () => JSX.Element;
 };
@@ -16,10 +17,11 @@ export const ComponentPreviewTabs = (props: Props) => {
     {
       align: "center",
       hideCode: false,
+      justify: "center",
     } as Props,
     props,
   );
-  const [, rest] = splitProps(merge, ["class", "align", "hideCode", "component", "children"]);
+  const [, rest] = splitProps(merge, ["class", "align", "justify", "hideCode", "component", "children"]);
   const [render, setRender] = createSignal(true);
 
   function onClickRerender() {
@@ -80,7 +82,9 @@ export const ComponentPreviewTabs = (props: Props) => {
               >
                 {render() && props.component()}
               </div> */}
-              <div class="group flex w-full rounded-md min-h-0 py-12 px-12 justify-start items-start">{render() && props.component()}</div>
+              <div class={cx("group flex w-full border rounded-md min-h-0 py-12 px-12 items-start", `justify-${props.justify}`)}>
+                {render() && props.component()}
+              </div>
             </TabsContent>
             <TabsContent class="overflow-hidden **:[figure]:!m-0 **:[pre]:h-[450px]" value="code">
               {props.children}

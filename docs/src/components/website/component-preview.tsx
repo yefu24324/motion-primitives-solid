@@ -6,6 +6,7 @@ import ComponentPreviewTabs from "./component-preview-tabs";
 type Props = ComponentProps<"div"> & {
   name: string;
   align?: "center" | "start" | "end";
+  justify?: "center" | "start" | "end";
   description?: string;
   hideCode?: boolean;
   type?: "block" | "component" | "example";
@@ -17,13 +18,14 @@ export const ComponentPreview = (props: Props) => {
     {
       align: "center",
       hideCode: false,
+      justify: "center",
     } as Props,
     props,
   );
-  const [local, rest] = splitProps(merge, ["name", "type", "align", "hideCode", "component"]);
+  const [local, rest] = splitProps(merge, ["name", "type", "align", "justify", "hideCode", "component"]);
 
   return (
-    <Switch fallback={<ComponentPreviewTabs align={local.align} component={props.component} hideCode={local.hideCode} {...rest} />}>
+    <Switch fallback={<ComponentPreviewTabs align={local.align} component={props.component} hideCode={local.hideCode} justify={local.justify} {...rest} />}>
       <Match when={!props.component}>
         <p class="text-muted-foreground text-sm">
           Component <code class="bg-muted relative rounded px-[0.3rem] py-[0.2rem] font-mono text-sm">{local.name}</code> not found in registry.

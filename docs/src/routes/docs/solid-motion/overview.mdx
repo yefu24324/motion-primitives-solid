@@ -1,15 +1,21 @@
 import { ComponentPreview } from '@/components/website/component-preview';
 import { Steps, Step, StepIcon, StepTitle } from "@/components/website/mdx/steps";
+import { BasicUsageDemo } from '@/examples/solid-motion/basic-usage-demo';
+import { BasicStateAnimationsDemo } from '@/examples/solid-motion/basic-state-animations-demo';
 
 # Solid Motion
 
+[@reference](https://motion.dev/docs/react-animation)
+[@Source](https://github.com/yefu24324/motion-primitives-solid/docs/src/routes/docs/solid-motion/overview.mdx)
+
+
 ## Basic Usage
 
-```tsx
-import { Motion } from "solid-motion";
+<ComponentPreview component={BasicUsageDemo}>
+```tsx file=<rootDir>/docs/src/examples/solid-motion/basic-usage-demo.tsx
 
-<Motion animate={{ opacity: 1 }} initial={{ opacity: 0 }}>Hello World</Motion>
 ```
+</ComponentPreview>
 
 # Installation
 
@@ -32,3 +38,13 @@ import { Motion } from "solid-motion";
     ```
   </Step>
 </Steps>
+
+# Usage
+
+## Animate State
+
+<ComponentPreview component={BasicStateAnimationsDemo}>
+```tsx file=<rootDir>/docs/src/examples/solid-motion/basic-state-animations-demo.tsx
+
+```
+</ComponentPreview>
