@@ -2,7 +2,7 @@ import { Accordion as AccordionPrimitive } from "@kobalte/core/accordion";
 import { useCollapsibleContext } from "@kobalte/core/collapsible";
 import type { ComponentProps, ValidComponent } from "solid-js";
 import { Show, splitProps } from "solid-js";
-import { Motion, Presence } from "solid-motion";
+import { AnimatePresence, Motion } from "solid-motion";
 
 import { cx } from "@/components/utils/cva";
 
@@ -58,7 +58,7 @@ export const AccordionContent = <T extends ValidComponent = "div">(props: Accord
   const context = useCollapsibleContext();
 
   return (
-    <Presence>
+    <AnimatePresence>
       <Show when={context.isOpen()}>
         <AccordionPrimitive.Content
           animate={{ "--mask-stop": "100%", height: "auto", opacity: 1 }}
@@ -73,6 +73,6 @@ export const AccordionContent = <T extends ValidComponent = "div">(props: Accord
           <div class={cx("pb-4 pt-0", props.class)}>{props.children}</div>
         </AccordionPrimitive.Content>
       </Show>
-    </Presence>
+    </AnimatePresence>
   );
 };

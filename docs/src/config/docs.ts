@@ -55,6 +55,11 @@ export const docsConfig: TDocsConfig = {
           items: [],
           title: "Overview",
         },
+        {
+          href: "/docs/solid-motion/layout-animations",
+          items: [],
+          title: "Layout",
+        },
       ],
       title: "Solid Motion",
     },

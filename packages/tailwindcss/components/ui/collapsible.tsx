@@ -1,7 +1,7 @@
 import { Collapsible as CollapsiblePrimitive, useCollapsibleContext } from "@kobalte/core/collapsible";
 import type { ComponentProps, ValidComponent } from "solid-js";
 import { Show, splitProps } from "solid-js";
-import { Motion, Presence } from "solid-motion";
+import { AnimatePresence, Motion } from "solid-motion";
 
 import { cx } from "@/components/utils/cva";
 
@@ -24,7 +24,7 @@ export const CollapsibleContent = <T extends ValidComponent = "button">(props: C
   const context = useCollapsibleContext();
 
   return (
-    <Presence>
+    <AnimatePresence>
       <Show when={context.isOpen()}>
         <CollapsiblePrimitive.Content
           animate={{ height: "auto", opacity: 1, overflow: "hidden" }}
@@ -37,6 +37,6 @@ export const CollapsibleContent = <T extends ValidComponent = "button">(props: C
           {...rest}
         />
       </Show>
-    </Presence>
+    </AnimatePresence>
   );
 };

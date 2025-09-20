@@ -1,7 +1,7 @@
 import { animate } from "motion";
 import { motionValue } from "motion-dom";
 import { type Accessor, createContext, createEffect, createSignal, type JSX, onCleanup, type Setter, Show, useContext } from "solid-js";
-import { createSpring, Motion, Presence } from "solid-motion";
+import { AnimatePresence, createSpring, Motion } from "solid-motion";
 
 import { cx } from "@/components/utils/cva";
 
@@ -102,7 +102,7 @@ function Cursor(props: CursorProps) {
   });
 
   return (
-    <Presence>
+    <AnimatePresence>
       <Show when={isActive()}>
         <Motion
           animate={{ opacity: 1, scale: 1 }}
@@ -116,7 +116,7 @@ function Cursor(props: CursorProps) {
           {props.children}
         </Motion>
       </Show>
-    </Presence>
+    </AnimatePresence>
   );
 }
 
@@ -237,7 +237,7 @@ function CursorFollow(props: CursorFollowProps) {
   });
 
   return (
-    <Presence>
+    <AnimatePresence>
       <Show when={isActive()}>
         <Motion
           animate={{
@@ -256,7 +256,7 @@ function CursorFollow(props: CursorFollowProps) {
           {props.children}
         </Motion>
       </Show>
-    </Presence>
+    </AnimatePresence>
   );
 }
 
