@@ -23,7 +23,6 @@ export function BasicLayoutTabsDemo() {
                   }}
                   as="li"
                   initial={false}
-                  key={item.label}
                   onClick={() => handleClick(item)}
                   style={tab}
                 >
@@ -39,16 +38,21 @@ export function BasicLayoutTabsDemo() {
       </nav>
       <main style={iconContainer}>
         <AnimatePresence mode="wait">
-          <Motion
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            initial={{ opacity: 0, y: 10 }}
-            key={selectedTab() ? selectedTab().label : "empty"}
-            style={icon}
-            transition={{ duration: 0.2 }}
-          >
-            {selectedTab() ? selectedTab().icon : "😋"}
-          </Motion>
+          <For each={tabs}>
+            {(item) => (
+              <Show when={selectedTab() === item}>
+                <Motion
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  initial={{ opacity: 0, y: 10 }}
+                  style={icon}
+                  transition={{ duration: 0.2 }}
+                >
+                  {item.icon}
+                </Motion>
+              </Show>
+            )}
+          </For>
         </AnimatePresence>
       </main>
     </div>

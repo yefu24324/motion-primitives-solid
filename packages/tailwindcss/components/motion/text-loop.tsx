@@ -44,13 +44,13 @@ export function TextLoop(props: TextLoopProps) {
 
   return (
     <div class={cx("relative inline-block whitespace-nowrap", props.class)}>
-      <AnimatePresence exitBeforeEnter={true}>
+      <AnimatePresence anchorX="left" mode="popLayout">
         <For each={items.toArray()}>
           {(child, index) => (
             <Show when={currentIndex() === index()}>
               <Motion
                 animate={props.animate || { opacity: 1, y: 0 }}
-                exit={props.exit || { opacity: 0, position: "absolute", top: 0, y: -20 }}
+                exit={props.exit || { opacity: 0, y: -20 }}
                 initial={props.initial || { opacity: 0, y: 20 }}
                 transition={props.transition || { duration: 0.3 }}
               >
