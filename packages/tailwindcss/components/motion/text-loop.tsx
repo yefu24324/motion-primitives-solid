@@ -1,7 +1,7 @@
 import { resolveElements } from "@solid-primitives/refs";
-import type { DOMKeyframesDefinition, Transition } from "motion";
+import type { Transition } from "motion";
 import { createEffect, createSignal, For, type JSX, onCleanup, Show } from "solid-js";
-import { AnimatePresence, Motion } from "solid-motion";
+import { AnimatePresence, Motion, type Variant, type Variants } from "solid-motion";
 
 import { cx } from "@/components/utils/cva";
 
@@ -9,9 +9,11 @@ export type TextLoopProps = {
   children: JSX.Element;
   class?: string;
   interval?: number;
-  initial?: DOMKeyframesDefinition;
-  animate?: DOMKeyframesDefinition;
-  exit?: DOMKeyframesDefinition;
+  variants?: {
+    animate: Variant;
+    exit: Variant;
+    initial: Variant;
+  };
   transition?: Transition;
   onIndexChange?: (index: number) => void;
   trigger?: boolean;
@@ -42,6 +44,12 @@ export function TextLoop(props: TextLoopProps) {
     if (timer) clearInterval(timer);
   });
 
+  const motionVariants: Variants = {
+    animate: { opacity: 1, y: 0 },
+    exit: { opacity: 0, y: -20 },
+    initial: { opacity: 0, y: 20 },
+  };
+
   return (
     <div class={cx("relative inline-block whitespace-nowrap", props.class)}>
       <AnimatePresence anchorX="left" mode="popLayout">
@@ -49,10 +57,11 @@ export function TextLoop(props: TextLoopProps) {
           {(child, index) => (
             <Show when={currentIndex() === index()}>
               <Motion
-                animate={props.animate || { opacity: 1, y: 0 }}
-                exit={props.exit || { opacity: 0, y: -20 }}
-                initial={props.initial || { opacity: 0, y: 20 }}
+                animate="animate"
+                exit="exit"
+                initial="initial"
                 transition={props.transition || { duration: 0.3 }}
+                variants={props.variants || motionVariants}
               >
                 {child}
               </Motion>

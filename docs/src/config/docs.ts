@@ -96,6 +96,11 @@ export const docsConfig: TDocsConfig = {
     {
       items: [
         {
+          href: "/docs/motion/text-effect",
+          items: [],
+          title: "Text Effect",
+        },
+        {
           href: "/docs/motion/text-loop",
           items: [],
           title: "Text Loop",

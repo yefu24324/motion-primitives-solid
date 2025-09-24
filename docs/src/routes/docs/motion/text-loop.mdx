@@ -1,6 +1,7 @@
 import { TextLoopDemo } from '@/examples/motion/text-loop-demo';
 import { ComponentPreview } from '@/components/website/component-preview';
 import { TextLoopCustomVariantsDemo } from '@/examples/motion/text-loop-custom-variants-demo';
+import { TextLoopOnIndexChangeDemo } from '@/examples/motion/text-loop-on-index-change-demo';
 
 # Text Loop
 
@@ -20,6 +21,16 @@ Text animation that transitions between multiple items, creating an engaging loo
 
 <ComponentPreview component={TextLoopCustomVariantsDemo} justify="start">
 ```tsx file=<rootDir>/docs/src/examples/motion/text-loop-custom-variants-demo.tsx
+
+```
+</ComponentPreview>
+
+### Text Loop with onIndexChange
+
+You can use the `onIndexChange` prop to trigger a callback function when the index changes. In this example, we use it to create alternating animation directions.
+
+<ComponentPreview component={TextLoopOnIndexChangeDemo} justify="start">
+```tsx file=<rootDir>/docs/src/examples/motion/text-loop-on-index-change-demo.tsx
 
 ```
 </ComponentPreview>
