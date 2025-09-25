@@ -164,6 +164,7 @@ const createVariantsWithTransition = (baseVariants: Variants, transition?: Trans
 export function TextEffect(props: TextEffectProps) {
   const merge = mergeProps(
     {
+      as: "div",
       per: "word" as PerType,
       preset: "fade" as PresetType,
       speedReveal: 1,
@@ -172,7 +173,6 @@ export function TextEffect(props: TextEffectProps) {
     },
     props,
   );
-  console.log(merge);
 
   const segments = () => splitText(props.children, merge.per);
 
@@ -212,6 +212,7 @@ export function TextEffect(props: TextEffectProps) {
       <Show when={merge.trigger}>
         <Motion
           animate="visible"
+          as={merge.as}
           class={merge.class}
           exit="exit"
           initial="hidden"
