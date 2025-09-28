@@ -71,6 +71,11 @@ export const docsConfig: TDocsConfig = {
           title: "Cursor",
         },
         {
+          href: "/docs/animate-ui/components/buttons/copy",
+          items: [],
+          title: "Copy Button",
+        },
+        {
           href: "/docs/animate-ui/effects/motion-effect",
           items: [],
           title: "Motion Effect",
