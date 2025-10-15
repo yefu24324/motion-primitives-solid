@@ -28,7 +28,11 @@ export function BasicLayoutTabsDemo() {
                 >
                   {`${item.icon} ${item.label}`}
                   <Show when={item === selectedTab()}>
-                    <Motion id="underline" layoutId="underline" style={underline} />
+                    <Motion
+                      id="underline"
+                      layoutId="underline"
+                      style={underline}
+                    />
                   </Show>
                 </Motion>
               </>
